@@ -331,7 +331,7 @@ python server.py
 
 ## License
 
-[Specify your license here]
+[MIT License]
 
 ## Support
 
