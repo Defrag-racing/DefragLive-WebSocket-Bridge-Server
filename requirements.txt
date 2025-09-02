@@ -1,0 +1,5 @@
+asyncio
+aiorun
+websockets
+requests
+python-dotenv

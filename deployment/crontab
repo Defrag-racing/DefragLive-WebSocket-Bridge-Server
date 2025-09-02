@@ -1,0 +1,8 @@
+# DefragLive Bridge Server - Cron Jobs
+# Copy JSON files from Docker container to web server every minute
+
+# Copy server state data
+* * * * * docker cp recursing_germain:/home/websocket_server/serverstate.json /var/www/html/
+
+# Copy console/chat data  
+* * * * * docker cp recursing_germain:/home/websocket_server/console.json /var/www/html/

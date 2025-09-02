@@ -1,0 +1,57 @@
+# Environment files
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Data files (generated at runtime)
+console.json
+serverstate.json  
+current_settings.json
+
+# Logs
+logs/*.log
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+EOF
+# Environment files
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+venv/
+env/
+
+# Data files (generated at runtime)
+console.json
+serverstate.json
+current_settings.json
+
+# Logs
+logs/*.log
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
