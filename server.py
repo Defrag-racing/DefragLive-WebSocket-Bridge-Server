@@ -274,8 +274,13 @@ async def handle_settings_request(websocket, content):
     elif content.get('action') == 'settings_batch':
         settings = content.get('settings', {})
         timestamp = content.get('timestamp', datetime.now().timestamp())
+        
+        # EXTRACT USERNAME FROM THE COMMAND:
+        username = content.get('username', 'Unknown User')
+        user_id = content.get('user_id')
+        opaque_id = content.get('opaque_id')
 
-        logging.info(f"Handling settings_batch: {settings}")
+        logging.info(f"Handling settings_batch from {username}: {settings}")
 
         # Save settings to file
         try:
@@ -293,23 +298,26 @@ async def handle_settings_request(websocket, content):
             with open(SETTINGS_FILE, 'w') as f:
                 json.dump(current_settings, f, indent=2)
 
-            logging.info(f"Settings saved to file: {current_settings}")
+            logging.info(f"Settings saved to file by {username}: {current_settings}")
 
         except Exception as e:
-            logging.error(f"Failed to save settings: {e}")
+            logging.error(f"Failed to save settings for {username}: {e}")
 
         # Convert settings to game commands and send to DefragLive bot
         commands = convert_settings_to_commands(settings)
         await send_commands_to_defrag_bot(commands)
 
-        # Broadcast settings change to all viewers
+        # Broadcast settings change to all viewers WITH USERNAME:
         broadcast_msg = {
             'action': 'settings_applied',
             'settings': settings,
-            'timestamp': timestamp
+            'timestamp': timestamp,
+            'username': username,  # ADD THIS
+            'user_id': user_id,    # ADD THIS (optional)
+            'opaque_id': opaque_id # ADD THIS (optional)
         }
         await broadcast(broadcast_msg)
-        logging.info("Broadcasted settings_applied to all users")
+        logging.info(f"Broadcasted settings_applied from {username} to all users")
         return
 
 async def ws_server(websocket, path):
