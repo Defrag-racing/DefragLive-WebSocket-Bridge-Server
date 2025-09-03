@@ -338,6 +338,15 @@ async def ws_server(websocket, path):
                         with open(SETTINGS_FILE, 'w') as f:
                             json.dump(settings, f, indent=2)
                         logging.info(f"Updated VPS settings from DefragLive bot: {settings}")
+                        
+                        # NEW: Broadcast current settings to all extensions to update their UI
+                        current_settings_msg = {
+                            'action': 'current_settings',
+                            'settings': settings
+                        }
+                        await broadcast(current_settings_msg)
+                        logging.info("Broadcasted current_settings to all extensions")
+                        
                     except Exception as e:
                         logging.error(f"Failed to update VPS settings: {e}")
                     continue
