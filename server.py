@@ -325,6 +325,39 @@ async def handle_settings_request(websocket, content):
         logging.info(f"Broadcasted settings_applied from {username} to all users")
         return
 
+async def handle_viewer_request(websocket, content):
+    """Handle viewer list requests from extension"""
+    
+    if content.get('action') == 'show_viewers':
+        viewers = content.get('viewers', [])
+        chunks = content.get('chunks', [])
+        
+        logging.info(f"Handling viewer list request: {len(viewers)} viewers")
+        
+        # Send commands to DefragLive bot to display viewer list in-game
+        defrag_connections = [ws for ws in USERS if hasattr(ws, 'is_defrag_bot') and ws.is_defrag_bot]
+        
+        if not defrag_connections:
+            logging.warning("DefragLive bot not connected - cannot display viewers")
+            return
+        
+        try:
+            # Send each chunk with 1 second delay between messages
+            for i, chunk in enumerate(chunks):
+                command_message = {
+                    'action': 'execute_command',
+                    'command': f'say {chunk}',
+                    'delay': i  # Delay index for timing
+                }
+                
+                for bot_ws in defrag_connections:
+                    await bot_ws.send(json.dumps(command_message))
+                
+                logging.info(f"Sent viewer chunk {i+1}/{len(chunks)}: {chunk[:50]}...")
+                
+        except Exception as e:
+            logging.error(f"Failed to send viewer list to DefragLive bot: {e}")
+
 async def ws_server(websocket, path):
     register(websocket)
     logging.info('New connection (%s total)!' % len(USERS))
@@ -382,6 +415,11 @@ async def ws_server(websocket, path):
                         # Handle settings requests
                         elif content.get('action') in ['get_current_settings', 'settings_batch']:
                             await handle_settings_request(websocket, content)
+                            continue
+
+                        # ADD THE NEW VIEWER HANDLING HERE:
+                        elif content.get('action') == 'show_viewers':
+                            await handle_viewer_request(websocket, content)
                             continue
 
                 valid_actions = [
