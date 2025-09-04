@@ -43,7 +43,7 @@ def convert_settings_to_commands(settings):
         'brightness': {'cvar': 'r_mapoverbrightbits', 'type': 'range', 'min': 1, 'max': 5, 'default': 2, 'vid_restart': True},
         'picmip': {'cvar': 'r_picmip', 'type': 'range', 'min': 0, 'max': 5, 'default': 0, 'vid_restart': True},
         'fullbright': {'cvar': 'r_fullbright', 'type': 'toggle', 'values': [0, 1], 'vid_restart': True},  # FIXED: Now toggle
-        'gamma': {'cvar': 'r_gamma', 'type': 'range', 'min': 1.0, 'max': 1.6, 'default': 1.2, 'format_decimals': True},  # ADD format_decimals flag
+        'gamma': {'cvar': 'r_gamma', 'type': 'range', 'min': 0.5, 'max': 1.6, 'default': 1.2, 'format_decimals': True},  # ADD format_decimals flag
         'drawgun': {'cvar': 'cg_drawgun', 'type': 'toggle', 'values': [2, 1]},
         'angles': {'cvar': 'df_chs1_Info6', 'type': 'toggle', 'values': [0, 40]},
         'lagometer': {'cvar': 'cg_lagometer', 'type': 'toggle', 'values': [0, 1]},
